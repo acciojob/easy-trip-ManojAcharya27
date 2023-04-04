@@ -63,7 +63,7 @@ public class AirportService {
         return airportRepository.calculateRevenueOfAFlight(flightId);
     }
 
-    public void addPassenger(Passenger passenger){
-        airportRepository.addPassenger(passenger);
+    public String addPassenger(Passenger passenger){
+        return  airportRepository.addPassenger(passenger);
     }
 }
