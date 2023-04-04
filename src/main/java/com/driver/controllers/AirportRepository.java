@@ -15,14 +15,15 @@ import java.util.*;
 public class AirportRepository {
 
 
-    List<Airport> airportsDb=new ArrayList<>();
+    HashMap<String,Airport> airportsDb=new HashMap<>();
     List<Flight> flightsDb=new ArrayList<>();
 
     List<Passenger> passengersDb=new ArrayList<>();
 
     public HashMap<Integer,List<Integer>> flightToPassengerDb = new HashMap<>();
-    public  void addAirport(Airport airport){
-        airportsDb.add(airport);
+    public  String addAirport(Airport airport){
+        airportsDb.put(airport.getAirportName(),airport);
+        return "SUCCESS";
     }
 
 
@@ -30,16 +31,15 @@ public class AirportRepository {
     public String getLargestAirportName(){
         int ans=0;
         Airport airport1=null;
-        for(Airport airport:airportsDb){
+        for (Airport airport: airportsDb.values()){
             if(airport.getNoOfTerminals()>ans){
                 ans=airport.getNoOfTerminals();
                 airport1=airport;
             }else if(ans==airport.getNoOfTerminals()){
-                if(airport1.getAirportName().compareTo(airport.getAirportName())<0){
+                if(airport.getAirportName().compareTo(airport1.getAirportName())<0){
                     airport1=airport;
                 }
             }
-
         }
         return airport1.getAirportName();
     }
@@ -57,11 +57,7 @@ public class AirportRepository {
     }
     public int getNumberOfPeopleOn(Date date,String airportName){
          Airport airport=null;
-         for(Airport airport1: airportsDb){
-             if(airport1.getAirportName().equals(airportName)){
-                 airport=airport1;
-             }
-         }
+         airport=airportsDb.get(airportName);
          if(airport==null) return  0;
          City city=airport.getCity();
          int count=0;
@@ -70,7 +66,6 @@ public class AirportRepository {
                  if(flight.getToCity()==city||flight.getToCity()==city){
                      int flightId=flight.getFlightId();
                      count+=flightToPassengerDb.get(flightId).size();
-
                  }
              }
          }
@@ -151,7 +146,7 @@ public class AirportRepository {
         }
         if(flight!=null){
             City city=flight.getFromCity();
-            for(Airport airport: airportsDb){
+            for(Airport airport: airportsDb.values()){
                 if(airport.getCity().compareTo(city)==0){
                     return airport.getAirportName();
                 }
