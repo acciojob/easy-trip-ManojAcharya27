@@ -62,8 +62,8 @@ public class AirportRepository {
          City city=airport.getCity();
          int count=0;
          for(Flight flight :flightsDb){
-             if(date.compareTo(flight.getFlightDate())==0){
-                 if(flight.getToCity()==city||flight.getToCity()==city){
+             if(date.equals(flight.getFlightDate())){
+                 if(flight.getToCity().equals(city)||flight.getToCity().equals(city)){
                      int flightId=flight.getFlightId();
                      count+=flightToPassengerDb.get(flightId).size();
                  }
