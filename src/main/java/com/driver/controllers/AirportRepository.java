@@ -85,27 +85,33 @@ public class AirportRepository {
    }
 
     public  String bookATicket(Integer flightId,Integer passengerId){
+        if(Objects.isNull(flightToPassengerDb.get(flightId))&&(flightToPassengerDb.get(flightId)).size()<flightsDb.get(flightId).getMaxCapacity()){
+            List<Integer> passengers =  flightToPassengerDb.get(flightId);
 
-        if(!flightToPassengerDb.containsKey(flightId)) return "FAILURE";
-        else{
-            Flight flight=null;
-            for(Flight flight1: flightsDb.values()){
-                if(flight1.getFlightId()==flightId){
-                    flight=flight1;
-                }
+            if(passengers.contains(passengerId)){
+                return "FAILURE";
             }
-            if(flight==null) return "FAILURE";
-            if(flightToPassengerDb.get(flightId).size()<flight.getMaxCapacity()){
-                List<Integer> passenger=flightToPassengerDb.get(flightId);
-                if(!passenger.contains(passengerId)) return "FAILURE";
-                 passenger.add(passengerId);
-                 flightToPassengerDb.put(flightId,passenger);
-                 return "SUCCESS";
+
+            passengers.add(passengerId);
+            flightToPassengerDb.put(flightId,passengers);
+            return "SUCCESS";
+        }
+        else if(Objects.isNull(flightToPassengerDb.get(flightId))){
+            flightToPassengerDb.put(flightId,new ArrayList<>());
+            List<Integer> passengers =  flightToPassengerDb.get(flightId);
+
+            if(passengers.contains(passengerId)){
+                return "FAILURE";
             }
+
+            passengers.add(passengerId);
+            flightToPassengerDb.put(flightId,passengers);
+            return "SUCCESS";
 
         }
-        return "FAILURE";
-    }
+        return  "FAILURE";
+        }
+
 
     public  String cancelATicket(Integer flightId,Integer passengerId){
         Flight flight=null;
