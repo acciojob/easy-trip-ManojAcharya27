@@ -121,15 +121,15 @@ public class AirportRepository {
             }
         }
         if(flight==null) return "FAILURE";
-        List<Integer> passenger=flightToPassengerDb.get(passengerId);
-        if(!passenger.contains(passengerId)) return "FAILURE";
+        List<Integer> passenger=flightToPassengerDb.get(flightId);
+        if(passenger==null) return "FAILURE";
         else {
-            passenger.remove(passengerId);
-           // flightToPassengerDb.put(passengerId,passenger);
+            if(passenger.contains(passengerId)){
+                passenger.remove(passengerId);
+            }
             return "SUCCESS";
 
         }
-
     }
 
    public int  countOfBookingsDoneByPassengerAllCombined(@PathVariable("passengerId")Integer passengerId){
