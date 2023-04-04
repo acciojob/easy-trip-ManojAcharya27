@@ -77,7 +77,7 @@ public class AirportRepository {
 
     public int calculateFlightFare(Integer flightId){
         int noOfPeople=flightToPassengerDb.get(flightId).size();
-        return 3000+50*noOfPeople;
+        return 3000+noOfPeople*50;
 
     }
    public void addFlight(Flight flight){
@@ -114,22 +114,17 @@ public class AirportRepository {
 
 
     public  String cancelATicket(Integer flightId,Integer passengerId){
-        Flight flight=null;
-        for(Flight flight1: flightsDb.values()){
-            if(flight1.getFlightId()==flightId){
-                flight=flight1;
-            }
+        List<Integer> passengers = flightToPassengerDb.get(flightId);
+        if(passengers == null){
+            return "FAILURE";
         }
-        if(flight==null) return "FAILURE";
-        List<Integer> passenger=flightToPassengerDb.get(flightId);
-        if(passenger==null) return "FAILURE";
-        else {
-            if(passenger.contains(passengerId)){
-                passenger.remove(passengerId);
-            }
-            return "SUCCESS";
 
+
+        if(passengers.contains(passengerId)){
+            passengers.remove(passengerId);
+            return "SUCCESS";
         }
+        return "FAILURE";
     }
 
    public int  countOfBookingsDoneByPassengerAllCombined(@PathVariable("passengerId")Integer passengerId){
@@ -165,7 +160,7 @@ public class AirportRepository {
 
    public int calculateRevenueOfAFlight(Integer flightId){
         int noOfPeople=flightToPassengerDb.get(flightId).size();
-        int flare=(noOfPeople*(noOfPeople-1))*25;
+        int flare=(noOfPeople*(noOfPeople+1))*25;
         int fixedFlare=3000*noOfPeople;
         return  fixedFlare+flare;
    }
