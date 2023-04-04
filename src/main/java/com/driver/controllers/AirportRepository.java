@@ -171,10 +171,11 @@ public class AirportRepository {
     }
 
    public int calculateRevenueOfAFlight(Integer flightId){
-        int noOfPeople=flightToPassengerDb.get(flightId).size();
-        int flare=(noOfPeople*(noOfPeople+1))*25;
-        int fixedFlare=3000*noOfPeople;
-        return  fixedFlare+flare;
+       int totalPeople = flightToPassengerDb.get(flightId).size();
+       int variableFare = (totalPeople*(totalPeople+1))*25;
+       int fixedFare = 3000*totalPeople;
+       int totalAmt= variableFare + fixedFare;
+       return totalAmt;
    }
 
     public  String addPassenger(Passenger passenger){
