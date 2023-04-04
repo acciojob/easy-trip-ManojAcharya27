@@ -16,7 +16,7 @@ public class AirportRepository {
 
 
     HashMap<String,Airport> airportsDb=new HashMap<>();
-    List<Flight> flightsDb=new ArrayList<>();
+    HashMap<Integer,Flight> flightsDb=new HashMap<>();
 
     List<Passenger> passengersDb=new ArrayList<>();
 
@@ -47,7 +47,7 @@ public class AirportRepository {
 
     public double getShortestDurationOfPossibleBetweenTwoCities(City fromCity, City toCity){
         double ans=Integer.MAX_VALUE;
-        for(Flight flight: flightsDb){
+        for(Flight flight: flightsDb.values()){
             if(flight.getFromCity().equals(fromCity)&&flight.getToCity().equals(toCity)){
                 if(flight.getDuration()<ans)  ans=flight.getDuration();
             }
@@ -58,10 +58,12 @@ public class AirportRepository {
     public int getNumberOfPeopleOn(Date date,String airportName){
          Airport airport=null;
          airport=airportsDb.get(airportName);
-         if(airport==null) return  0;
+         if(Objects.isNull(airport)){
+             return 0;
+         }
          City city=airport.getCity();
          int count=0;
-         for(Flight flight :flightsDb){
+         for(Flight flight :flightsDb.values()){
              if(date.equals(flight.getFlightDate())){
                  if(flight.getToCity().equals(city)||flight.getToCity().equals(city)){
                      int flightId=flight.getFlightId();
@@ -79,7 +81,7 @@ public class AirportRepository {
 
     }
    public void addFlight(Flight flight){
-        flightsDb.add(flight);
+        flightsDb.put(flight.getFlightId(),flight);
    }
 
     public  String bookATicket(Integer flightId,Integer passengerId){
@@ -87,7 +89,7 @@ public class AirportRepository {
         if(!flightToPassengerDb.containsKey(flightId)) return "FAILURE";
         else{
             Flight flight=null;
-            for(Flight flight1: flightsDb){
+            for(Flight flight1: flightsDb.values()){
                 if(flight1.getFlightId()==flightId){
                     flight=flight1;
                 }
@@ -107,7 +109,7 @@ public class AirportRepository {
 
     public  String cancelATicket(Integer flightId,Integer passengerId){
         Flight flight=null;
-        for(Flight flight1: flightsDb){
+        for(Flight flight1: flightsDb.values()){
             if(flight1.getFlightId()==flightId){
                 flight=flight1;
             }
@@ -139,7 +141,7 @@ public class AirportRepository {
 
     public  String getAirportNameFromFlightId(Integer flightId){
         Flight flight=null;
-        for(Flight flight1: flightsDb){
+        for(Flight flight1: flightsDb.values()){
             if(flight1.getFlightId()==flightId){
                 flight=flight1;
             }
