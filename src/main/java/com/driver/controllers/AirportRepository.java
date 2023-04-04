@@ -84,7 +84,7 @@ public class AirportRepository {
 
 
     public  String bookATicket(Integer flightId,Integer passengerId){
-        if(Objects.isNull(flightToPassengerDb.get(flightId))&&(flightToPassengerDb.get(flightId)).size()<flightsDb.get(flightId).getMaxCapacity()){
+        if(Objects.nonNull(flightToPassengerDb.get(flightId))&&(flightToPassengerDb.get(flightId)).size()<flightsDb.get(flightId).getMaxCapacity()){
             List<Integer> passengers =  flightToPassengerDb.get(flightId);
 
             if(passengers.contains(passengerId)){
@@ -179,7 +179,7 @@ public class AirportRepository {
 
     public  String addPassenger(Passenger passenger){
         passengersDb.put(passenger.getPassengerId(),passenger);
-        return "SUCCEUSS";
+        return "SUCCESS";
     }
 
 
